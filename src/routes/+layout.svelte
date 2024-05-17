@@ -1,10 +1,11 @@
-<script>
-	import '../app.css';
+<script lang="ts">
+	import '../app.pcss';
 	import '@maptiler/sdk/dist/maptiler-sdk.css';
 	import { Input } from '$lib/components/ui/input';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Sheet from '$lib/components/ui/sheet';
 	import { Separator } from '$lib/components/ui/separator';
+	import { page } from '$app/stores';
 </script>
 
 <div role="application">
@@ -123,7 +124,12 @@
 					></path></svg
 				>
 			</div>
-			<Input role="searchbox" placeholder="Search" class="w-1/2" />
+			{#if $page.url.pathname === '/maps'}
+				<form action="?/search" class="w-1/2" method="POST">
+					<Input role="searchbox" name="searchBox" placeholder="Search" class="w-full" />
+					<input type="submit" class="hidden" />
+				</form>
+			{/if}
 		</nav>
 	</header>
 	<div role="main" class="p-4">
