@@ -47,6 +47,7 @@
 		"embla-carousel-svelte": "^8.0.4",
 		"formsnap": "^1.0.0",
 		"lucide-svelte": "^0.378.0",
+		"maplibre-gl": "^4.3.1",
 		"mode-watcher": "^0.3.0",
 		"paneforge": "^0.0.4",
 		"svelte-sonner": "^0.3.24",

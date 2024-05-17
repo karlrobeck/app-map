@@ -14,6 +14,10 @@ export const actions: Actions = {
         }
         // fetch data from database
         // return and display data for the ui
-        return { userData: `searching for this data ${searchBox}` }
+        return {
+            userData: {
+                name: searchBox
+            }
+        }
     }
 }
