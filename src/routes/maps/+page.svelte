@@ -1,13 +1,13 @@
 <script lang="ts">
-	import maplibre from 'maplibre-gl';
+	import * as maptilersdk from '@maptiler/sdk';
 	import { onDestroy, onMount } from 'svelte';
 	import type { ActionData } from './$types';
 	import * as Sheet from '$lib/components/ui/sheet/index.js';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
-	let mainMap: maplibre.Map | undefined = undefined;
+	let mainMap: maptilersdk.Map | undefined = undefined;
 	let mapSideSheet: HTMLButtonElement | undefined = undefined;
-	let mapOnSideSheet: maplibre.Map | undefined = undefined;
+	let mapOnSideSheet: maptilersdk.Map | undefined = undefined;
 	let mapOnSideSheetContainer: any = undefined;
 	export let form: ActionData;
 	const API_KEY = '17pE2Nv1XmrNauiHohBm';
@@ -15,12 +15,13 @@
 	onMount(() => {
 		const initialState = { lng: 121.02904, lat: 14.69766, zoom: 16 };
 		mapSideSheet = <HTMLButtonElement>document.getElementById('showMapDataTrigger');
-		mainMap = new maplibre.Map({
+		mainMap = new maptilersdk.Map({
 			container: 'mainMapContainer',
 			style: `https://api.maptiler.com/maps/81f6dc3d-e229-4e80-b504-d0b750984104/style.json?key=${API_KEY}`,
 			center: [initialState.lng, initialState.lat],
 			zoom: initialState.zoom
 		});
+		const marker = new maptilersdk.Marker().setLngLat([121.02904, 14.69766]).addTo(mainMap);
 	});
 
 	onMount(() => {
@@ -29,7 +30,7 @@
 			sideSheetButton.click();
 			const initialState = { lng: 121.02904, lat: 14.69766, zoom: 18 };
 			setTimeout(() => {
-				mapOnSideSheet = new maplibre.Map({
+				mapOnSideSheet = new maptilersdk.Map({
 					container: mapOnSideSheetContainer,
 					style: `https://api.maptiler.com/maps/81f6dc3d-e229-4e80-b504-d0b750984104/style.json?key=${API_KEY}`,
 					center: [initialState.lng, initialState.lat],
@@ -39,8 +40,6 @@
 		}
 		// show the current searched user location in the map
 	});
-
-	function generateSideSheetMap() {}
 
 	onDestroy(() => {
 		mainMap?.remove();
