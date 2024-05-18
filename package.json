@@ -41,6 +41,10 @@
 	"dependencies": {
 		"@internationalized/date": "^3.5.3",
 		"@maptiler/sdk": "^2.0.3",
+		"@turf/buffer": "^6.5.0",
+		"@turf/collect": "^6.5.0",
+		"@turf/turf": "^6.5.0",
+		"@types/turf": "^3.5.32",
 		"bits-ui": "^0.21.7",
 		"clsx": "^2.1.1",
 		"cmdk-sv": "^0.0.17",

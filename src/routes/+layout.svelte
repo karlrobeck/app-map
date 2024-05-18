@@ -149,7 +149,7 @@
 									<Select.Group>
 										<Select.Label>Age</Select.Label>
 										{#each { length: 100 } as _, i}
-											<Select.Item value={i + 1} label={i + 1}>{i + 1}</Select.Item>
+											<Select.Item value={i + 1} label={`${i + 1}`}>{i + 1}</Select.Item>
 										{/each}
 									</Select.Group>
 								</ScrollArea>

@@ -1,44 +1,40 @@
 <script lang="ts">
 	import * as maptilersdk from '@maptiler/sdk';
 	import { onDestroy, onMount } from 'svelte';
-	import type { ActionData } from './$types';
-	import * as Sheet from '$lib/components/ui/sheet/index.js';
-	import Button from '$lib/components/ui/button/button.svelte';
-	import Separator from '$lib/components/ui/separator/separator.svelte';
+	import type { PageData } from './$types';
+	import { point, inside, polygon } from '@turf/turf';
 	let mainMap: maptilersdk.Map | undefined = undefined;
 	let mapSideSheet: HTMLButtonElement | undefined = undefined;
 	let mapOnSideSheet: maptilersdk.Map | undefined = undefined;
 	let mapOnSideSheetContainer: any = undefined;
-	export let form: ActionData;
+	export let data: PageData;
 	const API_KEY = '17pE2Nv1XmrNauiHohBm';
-
-	onMount(() => {
-		const initialState = { lng: 121.02904, lat: 14.69766, zoom: 16 };
-		mapSideSheet = <HTMLButtonElement>document.getElementById('showMapDataTrigger');
+	onMount(async () => {
+		// get the json of
+		const initialState = { lng: 121.02904, lat: 14.69766, zoom: 17.5 };
+		maptilersdk.config.apiKey = data.API_KEY || '';
 		mainMap = new maptilersdk.Map({
-			container: 'mainMapContainer',
-			style: `https://api.maptiler.com/maps/81f6dc3d-e229-4e80-b504-d0b750984104/style.json?key=${API_KEY}`,
-			center: [initialState.lng, initialState.lat],
-			zoom: initialState.zoom
+			container: 'mainMapContainer', // container's id or the HTML element to render the map
+			style: '81f6dc3d-e229-4e80-b504-d0b750984104',
+			center: [initialState.lng, initialState.lat], // starting position [lng, lat]
+			zoom: initialState.zoom // starting zoom
 		});
-		const marker = new maptilersdk.Marker().setLngLat([121.02904, 14.69766]).addTo(mainMap);
-	});
-
-	onMount(() => {
-		if (form?.userData !== undefined) {
-			const sideSheetButton = <HTMLButtonElement>document.getElementById('showMapDataTrigger');
-			sideSheetButton.click();
-			const initialState = { lng: 121.02904, lat: 14.69766, zoom: 18 };
-			setTimeout(() => {
-				mapOnSideSheet = new maptilersdk.Map({
-					container: mapOnSideSheetContainer,
-					style: `https://api.maptiler.com/maps/81f6dc3d-e229-4e80-b504-d0b750984104/style.json?key=${API_KEY}`,
-					center: [initialState.lng, initialState.lat],
-					zoom: initialState.zoom
-				});
-			}, 0);
-		}
-		// show the current searched user location in the map
+		let marker = new maptilersdk.Marker().setLngLat([121.02904, 14.69766]).addTo(mainMap);
+		mainMap.on('click', (ev) => {
+			const { lng, lat } = ev.lngLat;
+			if (!data.coordsJson) {
+				throw new Error('Unable to load cluster coordinates');
+			}
+			data.coordsJson.features.forEach((value, index) => {
+				const clickedPoint = point([lng, lat]);
+				const poly = polygon(value.geometry.coordinates);
+				if (inside(clickedPoint, poly)) {
+					marker.remove();
+					marker = new maptilersdk.Marker().setLngLat([lng, lat]).addTo(mainMap);
+					console.log(value.properties.name);
+				}
+			});
+		});
 	});
 
 	onDestroy(() => {
@@ -46,18 +42,4 @@
 	});
 </script>
 
-<Sheet.Root>
-	<Sheet.Trigger id="showMapDataTrigger"></Sheet.Trigger>
-	<Sheet.Content class="overflow-y-scroll" side="right">
-		<h4>Tomb Information:</h4>
-		<Separator class="my-4" />
-		<div bind:this={mapOnSideSheetContainer} class="h-1/2 w-full rounded-md"></div>
-		<Separator class="my-4" />
-		<h4>Name: {form?.userData?.name}</h4>
-		<p>
-			Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempora repellat numquam debitis
-			rerum voluptatibus maxime cum sequi alias ratione explicabo!
-		</p>
-	</Sheet.Content>
-</Sheet.Root>
 <div id="mainMapContainer" class="h-screen w-full rounded-md"></div>
