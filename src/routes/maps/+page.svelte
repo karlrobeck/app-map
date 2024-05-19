@@ -19,7 +19,7 @@
 			center: [initialState.lng, initialState.lat], // starting position [lng, lat]
 			zoom: initialState.zoom // starting zoom
 		});
-		let marker = new maptilersdk.Marker().setLngLat([121.02904, 14.69766]).addTo(mainMap);
+		let marker: maptilersdk.Marker | undefined = undefined;
 		mainMap.on('load', () => {
 			mainMap.on('click', (ev) => {
 				const { lng, lat } = ev.lngLat;
@@ -50,7 +50,7 @@
 							)
 							.addTo(mainMap);
 					});
-					marker.remove();
+					marker?.remove();
 					marker = new maptilersdk.Marker().setLngLat(ev.lngLat).addTo(mainMap);
 				}
 			});
