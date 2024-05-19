@@ -20,18 +20,38 @@
 			zoom: initialState.zoom // starting zoom
 		});
 		let marker = new maptilersdk.Marker().setLngLat([121.02904, 14.69766]).addTo(mainMap);
-		mainMap.on('click', (ev) => {
-			const { lng, lat } = ev.lngLat;
-			if (!data.coordsJson) {
-				throw new Error('Unable to load cluster coordinates');
-			}
-			data.coordsJson.features.forEach((value, index) => {
-				const clickedPoint = point([lng, lat]);
-				const poly = polygon(value.geometry.coordinates);
-				if (inside(clickedPoint, poly)) {
+		mainMap.on('load', () => {
+			mainMap.on('click', (ev) => {
+				const { lng, lat } = ev.lngLat;
+
+				const buildingFeatures = mainMap?.queryRenderedFeatures(ev.point, {
+					layers: ['bbuilding'] // put in layer id
+				});
+
+				const parkingfeature = mainMap?.queryRenderedFeatures(ev.point, {
+					layers: ['Parking Cover'] // put in parking layer id
+				});
+
+				if (buildingFeatures?.length || parkingfeature?.length) {
+					buildingFeatures?.forEach((feature) => {
+						const nameProperty = feature.properties?.name;
+						const addressProperty = feature.properties?.['addr:housenumber'];
+						if (nameProperty && addressProperty) {
+							console.log('Building name:', nameProperty);
+							console.log('House number:', addressProperty);
+						}
+					});
+					parkingfeature?.forEach((feature) => {
+						console.log('Parking feature properties:', feature.properties.name);
+						new maptilersdk.Popup({ offset: 25 })
+							.setLngLat(ev.lngLat)
+							.setHTML(
+								' <h3> Bagbag Cemetery Parking</h3 > <p>Operator: bagbag cemetery</p> <p>Address: Bagbag Cemetery,Pagkabuhay road, Novaliches, Quezon City, Metro Manila </p>'
+							)
+							.addTo(mainMap);
+					});
 					marker.remove();
-					marker = new maptilersdk.Marker().setLngLat([lng, lat]).addTo(mainMap);
-					console.log(value.properties.name);
+					marker = new maptilersdk.Marker().setLngLat(ev.lngLat).addTo(mainMap);
 				}
 			});
 		});
