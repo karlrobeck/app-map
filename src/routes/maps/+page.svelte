@@ -2,13 +2,11 @@
 	import * as maptilersdk from '@maptiler/sdk';
 	import { onDestroy, onMount } from 'svelte';
 	import type { PageData } from './$types';
-	import { point, inside, polygon } from '@turf/turf';
+	import * as Sheet from '$lib/components/ui/sheet';
+	import Button from '$lib/components/ui/button/button.svelte';
 	let mainMap: maptilersdk.Map | undefined = undefined;
-	let mapSideSheet: HTMLButtonElement | undefined = undefined;
-	let mapOnSideSheet: maptilersdk.Map | undefined = undefined;
-	let mapOnSideSheetContainer: any = undefined;
 	export let data: PageData;
-	const API_KEY = '17pE2Nv1XmrNauiHohBm';
+	let clusterData: any = {};
 	onMount(async () => {
 		// get the json of
 		const initialState = { lng: 121.02904, lat: 14.69766, zoom: 17.5 };
@@ -37,8 +35,10 @@
 						const nameProperty = feature.properties?.name;
 						const addressProperty = feature.properties?.['addr:housenumber'];
 						if (nameProperty && addressProperty) {
-							console.log('Building name:', nameProperty);
-							console.log('House number:', addressProperty);
+							const sheetBtn = <HTMLButtonElement>document.getElementById('clusterSheetBtn');
+							clusterData['nameProperty'] = nameProperty;
+							clusterData['addressProperty'] = addressProperty;
+							sheetBtn.click();
 						}
 					});
 					parkingfeature?.forEach((feature) => {
@@ -62,4 +62,21 @@
 	});
 </script>
 
+<Sheet.Root>
+	<Sheet.Trigger asChild let:builder>
+		<Button id="clusterSheetBtn" builders={[builder]} class="hidden"
+			>Click to show cluster sheet</Button
+		>
+	</Sheet.Trigger>
+	<Sheet.Content>
+		<Sheet.Header>
+			<Sheet.Title>
+				{clusterData?.nameProperty}
+			</Sheet.Title>
+			<Sheet.Description>
+				{clusterData?.addressProperty}
+			</Sheet.Description>
+		</Sheet.Header>
+	</Sheet.Content>
+</Sheet.Root>
 <div id="mainMapContainer" class="h-screen w-full rounded-md"></div>
