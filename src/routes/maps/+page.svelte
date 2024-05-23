@@ -1,12 +1,22 @@
 <script lang="ts">
+	import type { GeoJson, GeoJsonCoordinates, GeoJsonFeature } from '$lib/db/types';
 	import * as maptilersdk from '@maptiler/sdk';
 	import { onDestroy, onMount } from 'svelte';
 	import type { PageData } from './$types';
 	import * as Sheet from '$lib/components/ui/sheet';
 	import Button from '$lib/components/ui/button/button.svelte';
-	let mainMap: maptilersdk.Map | undefined = undefined;
+	import { calculateDistance } from '$lib/utils';
+	import PathFinder from 'geojson-path-finder';
+	import { v4 as uuidv4 } from 'uuid';
+	let mainMap: maptilersdk.Map;
 	export let data: PageData;
 	let clusterData: any = {};
+	let roadData: GeoJson;
+	let nearestNode: GeoJsonCoordinates;
+	let coordsArray: GeoJsonCoordinates[] = [];
+	let destinationNode: GeoJsonCoordinates;
+	let userLocation: GeoJsonCoordinates;
+	let currentDirection: string = '';
 	onMount(async () => {
 		// get the json of
 		const initialState = { lng: 121.02904, lat: 14.69766, zoom: 17.5 };
@@ -17,17 +27,41 @@
 			center: [initialState.lng, initialState.lat], // starting position [lng, lat]
 			zoom: initialState.zoom // starting zoom
 		});
+		const response = await fetch(
+			`https://api.maptiler.com/data/649d5018-07ca-4356-bea4-0a0e9e396428/features.json?key=${data.API_KEY}`
+		);
+		if (!response.ok) {
+			throw new Error(`HTTP error! Status: ${response.status}`);
+		}
+		roadData = await response.json();
+		roadData.features.forEach((value) => {
+			value.geometry.coordinates.map((coord) => {
+				const coords: [number, number] = coord;
+				coordsArray.push({ long: coords[0], lat: coords[1] });
+			});
+		});
+		userLocation = { long: 121.02923, lat: 14.69715 };
+
+		// Find the nearest node
+		let minDistance = Infinity;
+		coordsArray.forEach((coord) => {
+			const distance = calculateDistance(userLocation, coord);
+			if (distance < minDistance) {
+				minDistance = distance;
+				nearestNode = coord;
+			}
+		});
+
+		new maptilersdk.Marker().setLngLat([nearestNode?.long, nearestNode?.lat]).addTo(mainMap);
 		let marker: maptilersdk.Marker | undefined = undefined;
 		mainMap.on('load', () => {
-			mainMap.on('click', (ev) => {
-				const { lng, lat } = ev.lngLat;
-
-				const buildingFeatures = mainMap?.queryRenderedFeatures(ev.point, {
-					layers: ['bbuilding'] // put in layer id
+			mainMap?.on('click', (ev) => {
+				const buildingFeatures = mainMap.queryRenderedFeatures(ev.point, {
+					layers: ['bbuilding']
 				});
 
-				const parkingfeature = mainMap?.queryRenderedFeatures(ev.point, {
-					layers: ['Parking Cover'] // put in parking layer id
+				const parkingfeature = mainMap.queryRenderedFeatures(ev.point, {
+					layers: ['Parking Cover']
 				});
 
 				if (buildingFeatures?.length || parkingfeature?.length) {
@@ -51,11 +85,95 @@
 							.addTo(mainMap);
 					});
 					marker?.remove();
+					destinationNode = { long: ev.lngLat.lng, lat: ev.lngLat.lat };
 					marker = new maptilersdk.Marker().setLngLat(ev.lngLat).addTo(mainMap);
 				}
 			});
 		});
 	});
+
+	function findNearestNode(
+		coordinates: GeoJsonFeature[],
+		node: GeoJsonCoordinates
+	): {
+		distance: number | null;
+		coord: GeoJsonCoordinates | null;
+	} {
+		var bestDistance: number | null = null;
+		var bestCoord: GeoJsonCoordinates | null = null;
+
+		coordinates.forEach((feature) => {
+			feature.geometry.coordinates.forEach((coords) => {
+				let currentCoord: GeoJsonCoordinates = {
+					long: <number>(<unknown>coords[0]),
+					lat: <number>(<unknown>coords[1])
+				};
+				let distance = calculateDistance(node, currentCoord);
+				if (bestDistance == null || distance < bestDistance) {
+					bestDistance = distance;
+					bestCoord = currentCoord;
+				}
+			});
+		});
+
+		return { distance: bestDistance, coord: bestCoord };
+	}
+
+	function showDirections() {
+		const pathFinder = new PathFinder(roadData);
+		const startPos = findNearestNode(roadData.features, userLocation);
+		const endingPos = findNearestNode(roadData.features, destinationNode);
+		const path = pathFinder.findPath(
+			{
+				type: 'Feature',
+				geometry: {
+					type: 'Point',
+					coordinates: [startPos.coord?.long, startPos.coord?.lat]
+				},
+				properties: {
+					name: 'Starting Position'
+				}
+			},
+			{
+				type: 'Feature',
+				geometry: {
+					type: 'Point',
+					coordinates: [endingPos.coord?.long, endingPos.coord?.lat]
+				},
+				properties: {
+					name: 'Ending Position'
+				}
+			}
+		);
+		if (path) {
+			if (currentDirection) {
+				mainMap = mainMap.removeLayer(currentDirection);
+			}
+			currentDirection = `route-${uuidv4()}`;
+			mainMap.addLayer({
+				id: currentDirection,
+				type: 'line',
+				source: {
+					type: 'geojson',
+					data: {
+						type: 'Feature',
+						geometry: {
+							type: 'LineString',
+							coordinates: path?.path.map((coords) => [coords[0], coords[1]])
+						}
+					}
+				},
+				layout: {
+					'line-join': 'round',
+					'line-cap': 'round'
+				},
+				paint: {
+					'line-color': '#888',
+					'line-width': 6
+				}
+			});
+		}
+	}
 
 	onDestroy(() => {
 		mainMap?.remove();
@@ -64,9 +182,9 @@
 
 <Sheet.Root>
 	<Sheet.Trigger asChild let:builder>
-		<Button id="clusterSheetBtn" builders={[builder]} class="hidden"
-			>Click to show cluster sheet</Button
-		>
+		<Button id="clusterSheetBtn" builders={[builder]} class="hidden">
+			Click to show cluster sheet
+		</Button>
 	</Sheet.Trigger>
 	<Sheet.Content>
 		<Sheet.Header>
@@ -75,6 +193,7 @@
 			</Sheet.Title>
 			<Sheet.Description>
 				{clusterData?.addressProperty}
+				<Button on:click={showDirections}>Show Directions</Button>
 			</Sheet.Description>
 		</Sheet.Header>
 	</Sheet.Content>

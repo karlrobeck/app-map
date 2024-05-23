@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { cubicOut } from "svelte/easing";
 import type { TransitionConfig } from "svelte/transition";
+import type { GeoJsonCoordinates } from "./db/types";
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -60,3 +61,22 @@ export const flyAndScale = (
 		easing: cubicOut
 	};
 };
+
+export function calculateDistance(coord1: GeoJsonCoordinates, coord2: GeoJsonCoordinates): number {
+	const toRad = (value: number) => value * Math.PI / 180;
+
+	const lat1 = toRad(coord1.lat);
+	const lon1 = toRad(coord1.long);
+	const lat2 = toRad(coord2.lat);
+	const lon2 = toRad(coord2.long);
+
+	const dLat = lat2 - lat1;
+	const dLon = lon2 - lon1;
+
+	const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
+	const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+	// Earth radius in kilometers
+	const R = 6371;
+	return R * c;
+}

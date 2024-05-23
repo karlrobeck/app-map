@@ -42,3 +42,8 @@ export interface GeoJsonFeature {
     id: string
     properties: GeoJsonProperties
 }
+
+export interface GeoJsonCoordinates {
+    long: number
+    lat: number
+}

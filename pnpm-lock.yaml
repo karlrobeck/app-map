@@ -41,6 +41,9 @@ importers:
       formsnap:
         specifier: ^1.0.0
         version: 1.0.0(svelte@4.2.16)(sveltekit-superforms@2.13.1(@sveltejs/kit@2.5.8(@sveltejs/vite-plugin-svelte@3.1.0(svelte@4.2.16)(vite@5.2.11(@types/node@20.12.11)))(svelte@4.2.16)(vite@5.2.11(@types/node@20.12.11)))(@types/json-schema@7.0.15)(esbuild-runner@2.2.2(esbuild@0.20.2))(esbuild@0.20.2)(svelte@4.2.16))
+      geojson-path-finder:
+        specifier: ^2.0.2
+        version: 2.0.2
       lucide-svelte:
         specifier: ^0.378.0
         version: 0.378.0(svelte@4.2.16)
@@ -65,6 +68,9 @@ importers:
       tailwind-variants:
         specifier: ^0.2.1
         version: 0.2.1(tailwindcss@3.4.3)
+      uuid:
+        specifier: ^9.0.1
+        version: 9.0.1
       vaul-svelte:
         specifier: ^0.3.0
         version: 0.3.0(svelte@4.2.16)
@@ -90,6 +96,9 @@ importers:
       '@types/eslint':
         specifier: ^8.56.0
         version: 8.56.10
+      '@types/uuid':
+        specifier: ^9.0.8
+        version: 9.0.8
       '@typescript-eslint/eslint-plugin':
         specifier: ^7.0.0
         version: 7.8.0(@typescript-eslint/parser@7.8.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5)
@@ -961,6 +970,9 @@ packages:
     resolution: {integrity: sha512-2Rtv0EIG7Tx1CC2ASzCPw63ugCwrqJCFqNL/Gk9QYE5iIyd+0/S/TlPTgQ+qeQC8NCEn/TncUeZp+aM9cg68rg==}
     deprecated: '''turf'' has been deprecated in favor of ''@turf/turf'', which provides its own types.'
 
+  '@types/uuid@9.0.8':
+    resolution: {integrity: sha512-jg+97EGIcY9AGHJJRaaPVgetKDsrTgbRjQ5Msgjh/DQKEFl0DtyRr/VCOyD1T2R1MNeWPK/u7JoGhlDZnKBAfA==}
+
   '@types/validator@13.11.10':
     resolution: {integrity: sha512-e2PNXoXLr6Z+dbfx5zSh9TRlXJrELycxiaXznp4S5+D2M3b9bqJEitNHA5923jhnB2zzFiZHa2f0SI1HoIahpg==}
 
@@ -1546,6 +1558,9 @@ packages:
 
   geojson-equality@0.1.6:
     resolution: {integrity: sha512-TqG8YbqizP3EfwP5Uw4aLu6pKkg6JQK9uq/XZ1lXQntvTHD1BBKJWhNpJ2M0ax6TuWMP3oyx6Oq7FCIfznrgpQ==}
+
+  geojson-path-finder@2.0.2:
+    resolution: {integrity: sha512-mNs/vPRQpnOfWvKwWC+q1sWliWMIZPhj11oTf1TmLGDoEVlAWenhbiaDKrTioLViD4ndGpWUyqd+BxQp60Aqjg==}
 
   geojson-rbush@3.2.0:
     resolution: {integrity: sha512-oVltQTXolxvsz1sZnutlSuLDEcQAKYC/uXt9zDzJJ6bu0W+baTI8LZBaTup5afzibEH4N3jlq2p+a152wlBJ7w==}
@@ -4059,6 +4074,8 @@ snapshots:
     dependencies:
       '@types/geojson': 7946.0.14
 
+  '@types/uuid@9.0.8': {}
+
   '@types/validator@13.11.10':
     optional: true
 
@@ -4749,6 +4766,13 @@ snapshots:
   geojson-equality@0.1.6:
     dependencies:
       deep-equal: 1.1.2
+
+  geojson-path-finder@2.0.2:
+    dependencies:
+      '@turf/distance': 6.5.0
+      '@turf/explode': 6.5.0
+      '@turf/helpers': 6.5.0
+      tinyqueue: 2.0.3
 
   geojson-rbush@3.2.0:
     dependencies:
