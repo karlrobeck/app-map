@@ -180,6 +180,7 @@
 									<Select.Item value="child" label="Child">Child</Select.Item>
 									<Select.Item value="body parts" label="Body parts">Body parts</Select.Item>
 									<Select.Item value="old" label="Old">Old</Select.Item>
+									<Select.Item value="bone" label="bone">Bone</Select.Item>
 								</Select.Group>
 							</Select.Content>
 							<Select.Input name="favoriteFruit" />
