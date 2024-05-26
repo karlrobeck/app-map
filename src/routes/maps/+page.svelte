@@ -193,7 +193,7 @@
 			</Sheet.Title>
 			<Sheet.Description>
 				{clusterData?.addressProperty}
-				<Button on:click={showDirections}>Show Directions</Button>
+				<Button on:click={showDirections}>Show Ways Sheessh</Button>
 			</Sheet.Description>
 		</Sheet.Header>
 	</Sheet.Content>
