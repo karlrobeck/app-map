@@ -171,7 +171,7 @@
 						</Select.Root>
 						<Select.Root>
 							<Select.Trigger class="w-full">
-								<Select.Value placeholder="Select Gender" />
+								<Select.Value placeholder="Select Category" />
 							</Select.Trigger>
 							<Select.Content>
 								<Select.Group>
