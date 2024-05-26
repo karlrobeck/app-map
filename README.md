@@ -1,9 +1,13 @@
 # Bagbag Cemetery Application Documentation
 
 ## About
+
+
 Bagbag Cemetery application is a robust PWA map navigation system built with modern web technologies, ensuring a seamless and interactive user experience. The combination of SvelteKit, GeoJSON, and MapTiler SDK allows for the creation of a custom map tailored to the needs of Bagbag Cemetery. Deploying on Vercel ensures efficient and reliable hosting with easy maintenance and updates. The PWA features further enhance user engagement by a native app-like experience.
 
 ## Technical Requirements
+
+
 1. **Development Environment:**
    - Node.js (v20 or higher)
    - SvelteKit
@@ -11,7 +15,7 @@ Bagbag Cemetery application is a robust PWA map navigation system built with mod
 
 2. **Dependencies:**
    - SvelteKit framework
-   - MapTiler SDK for JavaScript
+   - MapTiler SDK for JavaScript (Typescript)
    - GeoJSON data for custom map
    - Vercel for deployment
    - Shadcn for UI
@@ -26,6 +30,8 @@ Bagbag Cemetery application is a robust PWA map navigation system built with mod
 ## Technical Implementation
 
 ### Application Structure
+
+
 - **SvelteKit Framework:** Utilized for building the frontend application with reactive components and a streamlined development experience.
 - **MapTiler SDK for JavaScript:** Integrated to display the custom map created with GeoJSON. Provides various map functionalities and customization options.
 - **GeoJSON:** Custom GeoJSON file containing geographical data specific to Bagbag Cemetery. This file is used to render the map within the application.
