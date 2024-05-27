@@ -40,7 +40,7 @@
 				coordsArray.push({ long: coords[0], lat: coords[1] });
 			});
 		});
-		userLocation = { long: 121.02923, lat: 14.69715 };
+		userLocation = { long: 121.0298, lat: 14.6966 };
 
 		// Find the nearest node
 		let minDistance = Infinity;
