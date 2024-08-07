@@ -6,7 +6,7 @@
 	<h1>Welcome to Bagbag Cemetery</h1>
 	<p>Explore and navigate the cemetery with our mapping services. Click to Get Started now</p>
 	<div class="flex flex-wrap gap-2">
-		<Button href="/maps">Get started</Button>
-		<Button variant="ghost" href="/about">Learn more</Button>
+		<Button href="/app">Get started</Button>
+		<Button variant="ghost" href="/app/about">Learn more</Button>
 	</div>
 </main>
