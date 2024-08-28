@@ -16,12 +16,9 @@ export const load: PageServerLoad = async (event) => {
     }
     let records = await readRecord(event.fetch);
 
-    // TODO check if we have a query that has a coordinates
-    let filtered_records = searchPerson(records, 'alvarez')
-    console.log(filtered_records.map((value) => value.firstName));
-
     return {
         coordsJson: coordsJson,
-        API_KEY: API_KEY
+        API_KEY: API_KEY,
+        records: records
     }
 }

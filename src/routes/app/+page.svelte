@@ -1,13 +1,15 @@
 <script lang="ts">
 	import type { GeoJson, GeoJsonCoordinates, GeoJsonFeature } from '$lib/db/types';
 	import * as maptilersdk from '@maptiler/sdk';
-	import { onDestroy, onMount } from 'svelte';
+	import * as Card from '$lib/components/ui/card';
+	import { getContext, onDestroy, onMount } from 'svelte';
 	import type { PageData } from './$types';
 	import * as Sheet from '$lib/components/ui/sheet';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { calculateDistance } from '$lib/utils';
 	import PathFinder from 'geojson-path-finder';
 	import { v4 as uuidv4 } from 'uuid';
+	import { retrieveByCluster, type RecordDB } from '$lib/db';
 	let mainMap: maptilersdk.Map;
 	export let data: PageData;
 	let clusterData: any = {};
@@ -17,6 +19,7 @@
 	let destinationNode: GeoJsonCoordinates;
 	let userLocation: GeoJsonCoordinates;
 	let currentDirection: string = '';
+
 	onMount(async () => {
 		// get the json of
 		const initialState = { lng: 121.02904, lat: 14.69766, zoom: 17.5 };
@@ -73,6 +76,8 @@
 							const sheetBtn = <HTMLButtonElement>document.getElementById('clusterSheetBtn');
 							clusterData['nameProperty'] = nameProperty;
 							clusterData['addressProperty'] = addressProperty;
+							//@ts-ignore
+							clusterData['records'] = retrieveByCluster(data.records, clusterData['nameProperty']);
 							sheetBtn.click();
 						}
 					});
@@ -188,7 +193,7 @@
 			Click to show cluster sheet
 		</Button>
 	</Sheet.Trigger>
-	<Sheet.Content side="bottom">
+	<Sheet.Content side="bottom" class="h-3/4 overflow-y-auto">
 		<Sheet.Header>
 			<Sheet.Title>
 				{clusterData?.nameProperty}
@@ -198,6 +203,19 @@
 				<Button on:click={showDirections}>Show Direction</Button>
 			</Sheet.Description>
 		</Sheet.Header>
+		<div class="flex flex-col gap-5 pt-5">
+			{#each clusterData?.records || [] as value}
+				<Card.Root>
+					<Card.Header>
+						<Card.Title>
+							{value.firstName}
+							{value.middleName}
+							{value.lastName}
+						</Card.Title>
+					</Card.Header>
+				</Card.Root>
+			{/each}
+		</div>
 	</Sheet.Content>
 </Sheet.Root>
 <div id="mainMapContainer" class="absolute h-screen w-full rounded-md"></div>

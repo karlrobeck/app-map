@@ -71,6 +71,22 @@ export function retrieveByAge(database: Array<RecordDB>, age: number): Array<Rec
     return fromAge
 }
 
+export function retrieveByCluster(database: Array<RecordDB>, cluster: string): Array<RecordDB> {
+
+    const formattedCluster = `${cluster[0]}-${cluster.split("").filter((value) => {
+        //@ts-ignore
+        return !isNaN(value);
+    }).join("").trim()}`
+
+    const filteredResult = database.filter((value) => {
+        if (value.cluster.toLowerCase() === formattedCluster.toLowerCase()) {
+            return true
+        }
+    })
+
+    return filteredResult
+}
+
 export function retrieveByAgeRange(database: Array<RecordDB>, from: number, to: number): Array<RecordDB | undefined> {
     const fromAgeRange = database.map((value) => {
         if (value.age >= to && value.age >= from) {

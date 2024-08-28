@@ -3,16 +3,17 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Sheet from '$lib/components/ui/sheet';
 	import * as Card from '$lib/components/ui/card';
-	import { onMount } from 'svelte';
+	import { onMount, setContext } from 'svelte';
 	import { searchPerson, type RecordDB } from '$lib/db/index';
+	import { writable } from 'svelte/store';
 
 	let filterValue = {};
 	let records: any = {};
-	let searchResult: [] | Array<RecordDB> = [];
-
+	let searchResult: Array<RecordDB> = [];
 	onMount(async () => {
 		const response = await fetch('/records.json');
 		records = <RecordDB>await response.json();
+		window['records'] = records;
 	});
 
 	function sendSearch(event: SubmitEvent) {
