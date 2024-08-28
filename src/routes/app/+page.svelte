@@ -36,6 +36,7 @@
 		roadData = await response.json();
 		roadData.features.forEach((value) => {
 			value.geometry.coordinates.map((coord) => {
+				//@ts-ignore
 				const coords: [number, number] = coord;
 				coordsArray.push({ long: coords[0], lat: coords[1] });
 			});
@@ -155,6 +156,7 @@
 				type: 'line',
 				source: {
 					type: 'geojson',
+					//@ts-ignore
 					data: {
 						type: 'Feature',
 						geometry: {

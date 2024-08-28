@@ -1,13 +1,75 @@
 <script lang="ts">
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
+	import * as Sheet from '$lib/components/ui/sheet';
+	import * as Card from '$lib/components/ui/card';
+	import { onMount } from 'svelte';
+	import { searchPerson, type RecordDB } from '$lib/db/index';
+
+	let filterValue = {};
+	let records: any = {};
+	let searchResult: [] | Array<RecordDB> = [];
+
+	onMount(async () => {
+		const response = await fetch('/records.json');
+		records = <RecordDB>await response.json();
+	});
+
+	function sendSearch(event: SubmitEvent) {
+		//@ts-ignore
+		const searchVal = event.target.search.value;
+		// request the record data
+		searchResult = searchPerson(records, searchVal);
+		document.getElementById('searchResultDialog')?.click();
+	}
 </script>
 
 <main class="relative h-screen flex-col">
 	<header class="absolute top-0 z-50 mx-4 mt-3.5 w-[80vw]">
 		<div class="relative">
-			<Input placeholder="Search" />
-			<Button size="icon" variant="ghost" class="absolute right-0 top-0">
+			<form on:submit|preventDefault={sendSearch}>
+				<Input name="search" placeholder="Search" />
+				<Sheet.Root>
+					<Sheet.Trigger asChild let:builder>
+						<Button
+							id="searchFilterBtn"
+							type="button"
+							size="icon"
+							builders={[builder]}
+							variant="ghost"
+							class="absolute right-0 top-0"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="16"
+								height="16"
+								fill="currentColor"
+								class="bi bi-filter"
+								viewBox="0 0 16 16"
+							>
+								<path
+									d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"
+								/>
+							</svg>
+						</Button>
+					</Sheet.Trigger>
+					<Sheet.Content side="bottom" class="h-3/4">
+						<Sheet.Header>Search Filter</Sheet.Header>
+					</Sheet.Content>
+				</Sheet.Root>
+			</form>
+		</div>
+	</header>
+	<Sheet.Root>
+		<Sheet.Trigger asChild let:builder>
+			<Button
+				id="searchResultDialog"
+				type="button"
+				size="icon"
+				builders={[builder]}
+				variant="ghost"
+				class="absolute right-0 top-0"
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					width="16"
@@ -21,8 +83,24 @@
 					/>
 				</svg>
 			</Button>
-		</div>
-	</header>
+		</Sheet.Trigger>
+		<Sheet.Content side="bottom" class="h-3/4 overflow-y-auto">
+			<Sheet.Header>Search Result</Sheet.Header>
+			<div class="flex flex-col gap-5 pt-5">
+				{#each searchResult || [] as value}
+					<Card.Root>
+						<Card.Header>
+							<Card.Title>
+								{value.firstName}
+								{value.middleName}
+								{value.lastName}
+							</Card.Title>
+						</Card.Header>
+					</Card.Root>
+				{/each}
+			</div>
+		</Sheet.Content>
+	</Sheet.Root>
 	<article class="">
 		<slot></slot>
 	</article>
