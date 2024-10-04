@@ -111,29 +111,34 @@
 			Click to show cluster sheet
 		</Button>
 	</Drawer.Trigger>
-	<Drawer.Content class="h-3/4">
-		<div class="h-full mx-auto w-full max-w-sm overflow-y-auto">
+	<Drawer.Content class="mx-auto h-3/4 w-full">
+		<div class="h-full overflow-y-auto w-full">
 			<Drawer.Header>
-				<Sheet.Description>
+				<Drawer.Description>
 					{clusterData?.addressProperty}
-				</Sheet.Description>
-				<Sheet.Title>
+				</Drawer.Description>
+				<Drawer.Title>
 					{clusterData?.nameProperty}
-				</Sheet.Title>
-				<Button
-					on:click={() => {
-						let result = showDirections(
-							mainMap,
-							roadData,
-							currentDirection,
-							userLocation,
-							destinationNode
-						);
-						if (result) {
-							currentDirection = result;
-						}
-					}}>Show Direction</Button
-				>
+				</Drawer.Title>
+				<Drawer.Close>
+					<Button
+						class="w-full"
+						on:click={() => {
+							let result = showDirections(
+								mainMap,
+								roadData,
+								currentDirection,
+								userLocation,
+								destinationNode
+							);
+							if (result) {
+								currentDirection = result;
+							}
+						}}
+					>
+						Show Direction
+					</Button>
+				</Drawer.Close>
 			</Drawer.Header>
 			<div class="flex flex-col gap-5 pt-5">
 				{#each clusterData?.records || [] as value}
