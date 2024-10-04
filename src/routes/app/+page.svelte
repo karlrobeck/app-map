@@ -157,7 +157,7 @@
 								</Card.Header>
 							</Card.Root>
 						</Drawer.Trigger>
-						<Drawer.Content class="h-3/4 w-full">
+						<Drawer.Content class="h-3/4 w-full border-none">
 							<div class="h-full w-full overflow-y-auto">
 								<Drawer.Header>
 									<div class="flex flex-row items-center gap-5">

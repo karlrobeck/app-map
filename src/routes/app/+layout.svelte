@@ -6,14 +6,16 @@
 	import { onMount, setContext } from 'svelte';
 	import { searchPerson, type RecordDB } from '$lib/db/index';
 	import { writable } from 'svelte/store';
-
+	import type { FormInputEvent } from '$lib/components/ui/input';
+	import * as Command from '$lib/components/ui/command/index.js';
+	import lodash from 'lodash'
 	let filterValue = {};
 	let records: any = {};
 	let searchResult: Array<RecordDB> = [];
+	let topResult: string = '';
 	onMount(async () => {
 		const response = await fetch('/records.json');
 		records = <RecordDB>await response.json();
-		
 		window.records = records;
 	});
 
@@ -24,13 +26,32 @@
 		searchResult = searchPerson(records, searchVal);
 		document.getElementById('searchResultDialog')?.click();
 	}
+	$: {
+		if(lodash.isArray(records)){
+			searchResult = searchPerson(records,topResult).slice(0,5)
+		}
+	}
 </script>
 
 <main class="relative h-screen flex-col">
 	<header class="absolute top-0 z-50 mx-4 mt-3.5 w-[80vw]">
 		<div class="relative">
 			<form on:submit|preventDefault={sendSearch}>
-				<Input name="search" placeholder="Search" />
+				<Command.Root>
+					<Command.Input bind:value={topResult} placeholder="Search" />
+					<Command.List>
+						{#if topResult !== ''}
+							<Command.Empty>No results found.</Command.Empty>
+							<Command.Group heading="Suggestions">
+								{#each searchResult as record}									
+								<Command.Item>
+									<span>{record.firstName} {record.middleName} {record.lastName}</span>
+								</Command.Item>
+								{/each}
+							</Command.Group>
+						{/if}
+					</Command.List>
+				</Command.Root>
 				<Sheet.Root>
 					<Sheet.Trigger asChild let:builder>
 						<Button
