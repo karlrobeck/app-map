@@ -4,20 +4,30 @@
 	import * as Sheet from '$lib/components/ui/sheet';
 	import * as Card from '$lib/components/ui/card';
 	import { onMount, setContext } from 'svelte';
-	import { searchPerson, type RecordDB } from '$lib/db/index';
-	import { writable } from 'svelte/store';
-	import type { FormInputEvent } from '$lib/components/ui/input';
+	import { retrieveByAgeRange, retrieveByGender, searchPerson, type RecordDB } from '$lib/db/index';
+	import * as Select from '$lib/components/ui/select/index.js';
 	import * as Command from '$lib/components/ui/command/index.js';
 	import * as Drawer from '$lib/components/ui/drawer';
 	import * as Avatar from '$lib/components/ui/avatar/index.js';
+	//@ts-ignore
 	import lodash from 'lodash';
+	import { Checkbox } from '$lib/components/ui/checkbox';
+	import { Label } from '$lib/components/ui/label';
 	let filterValue = {};
-	let records: any = {};
+	let records: RecordDB[] = [];
 	let searchResult: Array<RecordDB> = [];
 	let topResult: string = '';
+	let filterByGender:boolean = false;
+	let filterByAgeRange:boolean = false;
+	let filterByCategory:boolean = false;
+	let categoryValue:string = ''
+	let ageRangeLowValue:number = 0
+	let ageRangeHighValue:number = 0
+	let genderValue:string = ''
+
 	onMount(async () => {
 		const response = await fetch('/records.json');
-		records = <RecordDB>await response.json();
+		records = <RecordDB[]>await response.json();
 		window.records = records;
 	});
 
@@ -31,7 +41,6 @@
 	$: {
 		if (lodash.isArray(records)) {
 			searchResult = searchPerson(records, topResult);
-			console.log(searchResult);
 		}
 	}
 </script>
@@ -205,6 +214,72 @@
 					</Sheet.Trigger>
 					<Sheet.Content side="bottom" class="h-3/4">
 						<Sheet.Header>Search Filter</Sheet.Header>
+						<div class="space-y-5 p-4">
+							<div class="flex items-center space-x-2">
+								<Checkbox id="terms" checked aria-labelledby="terms-label" />
+								<Label
+									id="terms-label"
+									for="terms"
+									class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+								>
+									Enable Filter
+								</Label>
+							</div>
+							<hr />
+							<h4>Filter by</h4>
+							<div class="space-y-5">
+								<div class="space-y-2.5">
+									<div class="flex flex-row items-center gap-2.5">
+										<span class="muted">Gender</span>
+										<Checkbox bind:checked={filterByGender} />
+									</div>
+									<Select.Root onSelectedChange={(v) => {
+										if(v){
+											//@ts-ignore
+											genderValue = v.value
+										}
+									}} disabled={!filterByGender}>
+										<Select.Trigger>
+											<Select.Value placeholder="Select Gender" />
+										</Select.Trigger>
+										<Select.Content>
+											<Select.Group>
+												<Select.Label>Gender</Select.Label>
+												<Select.Item value='male' label={'Male'}>Male</Select.Item>
+												<Select.Item value='female' label={'Female'}>Female</Select.Item>
+											</Select.Group>
+										</Select.Content>
+									</Select.Root>
+								</div>
+								<div class="space-y-2.5">
+									<div class="flex flex-row items-center gap-2.5">
+										<span class="muted">Age</span>
+										<Checkbox bind:checked={filterByAgeRange} />
+									</div>
+									<Input bind:value={ageRangeLowValue} disabled={!filterByAgeRange} placeholder="Starting age" type="number" />
+									<Input bind:value={ageRangeHighValue} disabled={!filterByAgeRange} placeholder="Ending age" type="number" />
+								</div>
+								<div class="space-y-2.5">
+									<div class="flex flex-row items-center gap-2.5">
+										<span class="muted">Category</span>
+										<Checkbox bind:checked={filterByCategory} />
+									</div>
+									<Select.Root disabled={!filterByCategory}>
+										<Select.Trigger>
+											<Select.Value placeholder="Select Category" />
+										</Select.Trigger>
+										<Select.Content>
+											<Select.Group>
+												<Select.Label>Category</Select.Label>
+												{#each new Set(records.map((v) => v.category)) as category}
+													<Select.Item value={category} label={category}>{category}</Select.Item>
+												{/each}
+											</Select.Group>
+										</Select.Content>
+									</Select.Root>
+								</div>
+							</div>
+						</div>
 					</Sheet.Content>
 				</Sheet.Root>
 			</form>
