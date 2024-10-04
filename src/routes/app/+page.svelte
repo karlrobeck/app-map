@@ -157,7 +157,7 @@
 								</Card.Header>
 							</Card.Root>
 						</Drawer.Trigger>
-						<Drawer.Content class="h-3/4 w-full border-none">
+						<Drawer.Content class="h-3/4 w-full">
 							<div class="h-full w-full overflow-y-auto">
 								<Drawer.Header>
 									<div class="flex flex-row items-center gap-5">
@@ -254,14 +254,6 @@
 									<div class="grid grid-cols-2">
 										<span class="small sm:large">Funeral Service</span>
 										<span class="small sm:large underline">{value.funeralService}</span>
-									</div>
-									<div class="grid grid-cols-2">
-										<span class="small sm:large">Cause of death</span>
-										<span class="small sm:large underline">{value.causeOfDeath}</span>
-									</div>
-									<div class="grid grid-cols-2">
-										<span class="small sm:large">Place of death</span>
-										<span class="small sm:large underline">{value.placeOfDeath}</span>
 									</div>
 								</div>
 							</div>
