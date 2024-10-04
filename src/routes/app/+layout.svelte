@@ -50,14 +50,16 @@
 					{#if topResult !== ''}
 						<Command.List>
 							<Command.Empty>No results found.</Command.Empty>
-							<Command.Group heading="Suggestions">
+							<Command.Group heading="Suggestions" class="w-full">
 								{#each searchResult.slice(0, 5) as record}
 									<Drawer.Root>
-										<Command.Item data-value={record.firstName}>
-											<Drawer.Trigger>
-												{lodash.startCase(
-													`${record.firstName} ${record.middleName} ${record.lastName}`
-												)}
+										<Command.Item class="w-full">
+											<Drawer.Trigger class="flex w-full justify-start">
+												<span
+													>{lodash.startCase(
+														`${record.firstName} ${record.middleName} ${record.lastName}`
+													)}</span
+												>
 											</Drawer.Trigger>
 										</Command.Item>
 										<Drawer.Content class="h-3/4 w-full">
