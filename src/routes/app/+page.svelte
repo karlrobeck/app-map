@@ -157,22 +157,22 @@
 								</Card.Header>
 							</Card.Root>
 						</Drawer.Trigger>
-						<Drawer.Content class="mx-auto h-3/4 w-full">
+						<Drawer.Content class="h-3/4 w-full">
 							<div class="h-full w-full overflow-y-auto">
 								<Drawer.Header>
 									<div class="flex flex-row items-center gap-5">
-										<Avatar.Root class="h-16 w-16">
+										<Avatar.Root class="h-14 w-14 sm:h-16 sm:w-16">
 											<Avatar.Fallback
 												>{value.firstName.at(0)}{value.lastName.at(0)}</Avatar.Fallback
 											>
 										</Avatar.Root>
-										<div>
-											<h3>{value.lastName}, {value.firstName}, {value.middleName}</h3>
-											<h4>{value.category} / {value.sex}</h4>
+										<div class="flex flex-col items-start">
+											<h3 class="scroll-m-0 text-sm sm:text-2xl tracking-normal">{value.lastName}, {value.firstName}, {value.middleName}</h3>
+											<h4 class="scroll-m-0 text-sm sm:text-xl tracking-normal">{value.category} / {value.sex}</h4>
 										</div>
 									</div>
 									<div class="flex flex-row items-center gap-5">
-										<span class="lead flex flex-row items-center gap-2.5">
+										<span class="small sm:large flex flex-row items-center gap-2.5">
 											<svg
 												xmlns="http://www.w3.org/2000/svg"
 												width="16"
@@ -187,7 +187,7 @@
 											</svg>
 											{value.birthDay}</span
 										>
-										<span class="lead flex flex-row items-center gap-2.5">
+										<span class="small sm:large flex flex-row items-center gap-2.5">
 											<svg
 												fill="#000000"
 												height="16"
@@ -224,46 +224,46 @@
 											{value.dateOfDeath}
 										</span>
 									</div>
-									<div class="flex flex-col gap-5 pt-4">
-										<div class="grid grid-cols-3 border-b">
-											<span class="muted">Cluster: <span class="small">{value.cluster}</span></span>
-											<span class="muted">Wing: <span class="small">{value.wing}</span></span>
-											<span class="muted">Level: <span class="small">{value.level}</span></span>
-										</div>
-										<div class="grid grid-cols-2">
-											<span>Date of interment</span>
-											<span>{value.dateOfInterment}</span>
-										</div>
-										<div class="grid grid-cols-2">
-											<span>Date of burial</span>
-											<span>{value.dateOfBurial}</span>
-										</div>
-										<div class="grid grid-cols-2">
-											<span>O.R Number</span>
-											<span>{value.ORNumber}</span>
-										</div>
-										<div class="grid grid-cols-2">
-											<span>Registration Number</span>
-											<span>{value.registrationNumber}</span>
-										</div>
-										<div class="grid grid-cols-2">
-											<span>Cemetery</span>
-											<span>{value.cemetery}</span>
-										</div>
-										<div class="grid grid-cols-2">
-											<span>Funeral Service</span>
-											<span>{value.funeralService}</span>
-										</div>
-										<div class="grid grid-cols-2">
-											<span>Cause of death</span>
-											<span>{value.causeOfDeath}</span>
-										</div>
-										<div class="grid grid-cols-2">
-											<span>Place of death</span>
-											<span>{value.placeOfDeath}</span>
-										</div>
-									</div>
 								</Drawer.Header>
+								<div class="flex flex-col gap-5 p-4">
+									<div class="grid grid-cols-3 border-b">
+										<span class="muted">Cluster: <span class="small">{value.cluster}</span></span>
+										<span class="muted">Wing: <span class="small">{value.wing}</span></span>
+										<span class="muted">Level: <span class="small">{value.level}</span></span>
+									</div>
+									<div class="grid grid-cols-2">
+										<span class="small sm:large">Date of interment</span>
+										<span class="small sm:large underline">{value.dateOfInterment}</span>
+									</div>
+									<div class="grid grid-cols-2">
+										<span class="small sm:large">Date of burial</span>
+										<span class="small sm:large underline">{value.dateOfBurial}</span>
+									</div>
+									<div class="grid grid-cols-2">
+										<span class="small sm:large">O.R Number</span>
+										<span class="small sm:large underline">{value.ORNumber}</span>
+									</div>
+									<div class="grid grid-cols-2">
+										<span class="small sm:large">Registration Number</span>
+										<span class="small sm:large underline">{value.registrationNumber}</span>
+									</div>
+									<div class="grid grid-cols-2">
+										<span class="small sm:large">Cemetery</span>
+										<span class="small sm:large underline">{value.cemetery}</span>
+									</div>
+									<div class="grid grid-cols-2">
+										<span class="small sm:large">Funeral Service</span>
+										<span class="small sm:large underline">{value.funeralService}</span>
+									</div>
+									<div class="grid grid-cols-2">
+										<span class="small sm:large">Cause of death</span>
+										<span class="small sm:large underline">{value.causeOfDeath}</span>
+									</div>
+									<div class="grid grid-cols-2">
+										<span class="small sm:large">Place of death</span>
+										<span class="small sm:large underline">{value.placeOfDeath}</span>
+									</div>
+								</div>
 							</div>
 						</Drawer.Content>
 					</Drawer.Root>
