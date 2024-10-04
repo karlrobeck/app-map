@@ -28,7 +28,8 @@
 	}
 	$: {
 		if(lodash.isArray(records)){
-			searchResult = searchPerson(records,topResult).slice(0,5)
+			searchResult = searchPerson(records,topResult)
+			console.log(searchResult)
 		}
 	}
 </script>
@@ -38,19 +39,19 @@
 		<div class="relative">
 			<form on:submit|preventDefault={sendSearch}>
 				<Command.Root>
-					<Command.Input bind:value={topResult} placeholder="Search" />
+					<Input name="search" bind:value={topResult} class="focus-visible:ring-0" placeholder="Search" />
+					{#if topResult !== ''}
 					<Command.List>
-						{#if topResult !== ''}
-							<Command.Empty>No results found.</Command.Empty>
-							<Command.Group heading="Suggestions">
-								{#each searchResult as record}									
-								<Command.Item>
-									<span>{record.firstName} {record.middleName} {record.lastName}</span>
-								</Command.Item>
-								{/each}
-							</Command.Group>
-						{/if}
+						<Command.Empty>No results found.</Command.Empty>
+						<Command.Group heading="Suggestions">
+							{#each searchResult.slice(0,5) as record}									
+							<Command.Item data-value={record.firstName}>
+								{lodash.startCase(`${record.firstName} ${record.middleName} ${record.lastName}`)}
+							</Command.Item>
+							{/each}
+						</Command.Group>
 					</Command.List>
+					{/if}
 				</Command.Root>
 				<Sheet.Root>
 					<Sheet.Trigger asChild let:builder>
