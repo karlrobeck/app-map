@@ -13,7 +13,8 @@
 	onMount(async () => {
 		const response = await fetch('/records.json');
 		records = <RecordDB>await response.json();
-		window['records'] = records;
+		
+		window.records = records;
 	});
 
 	function sendSearch(event: SubmitEvent) {
