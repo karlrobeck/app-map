@@ -13,6 +13,7 @@
 	import lodash from 'lodash';
 	import { Checkbox } from '$lib/components/ui/checkbox';
 	import { Label } from '$lib/components/ui/label';
+	import Slider from '$lib/components/ui/slider/slider.svelte';
 	let filterValue = {};
 	let records: RecordDB[] = [];
 	let searchResult: Array<RecordDB> = [];
@@ -21,8 +22,7 @@
 	let filterByAgeRange:boolean = false;
 	let filterByCategory:boolean = false;
 	let categoryValue:string = ''
-	let ageRangeLowValue:number = 0
-	let ageRangeHighValue:number = 0
+	let ageRangeValue:number[] = [20,50]
 	let genderValue:string = ''
 
 	onMount(async () => {
@@ -213,20 +213,9 @@
 						</Button>
 					</Sheet.Trigger>
 					<Sheet.Content side="bottom" class="h-3/4">
-						<Sheet.Header>Search Filter</Sheet.Header>
 						<div class="space-y-5 p-4">
-							<div class="flex items-center space-x-2">
-								<Checkbox id="terms" checked aria-labelledby="terms-label" />
-								<Label
-									id="terms-label"
-									for="terms"
-									class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-								>
-									Enable Filter
-								</Label>
-							</div>
-							<hr />
 							<h4>Filter by</h4>
+							<hr>
 							<div class="space-y-5">
 								<div class="space-y-2.5">
 									<div class="flex flex-row items-center gap-2.5">
@@ -256,8 +245,8 @@
 										<span class="muted">Age</span>
 										<Checkbox bind:checked={filterByAgeRange} />
 									</div>
-									<Input bind:value={ageRangeLowValue} disabled={!filterByAgeRange} placeholder="Starting age" type="number" />
-									<Input bind:value={ageRangeHighValue} disabled={!filterByAgeRange} placeholder="Ending age" type="number" />
+									<Slider class={!filterByAgeRange ? "opacity-20" : ""} disabled={!filterByAgeRange} bind:value={ageRangeValue} min={0} max={100} />
+									<span class="muted">{ageRangeValue[0]} to {ageRangeValue[1]}</span>
 								</div>
 								<div class="space-y-2.5">
 									<div class="flex flex-row items-center gap-2.5">
