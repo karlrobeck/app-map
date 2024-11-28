@@ -54,7 +54,7 @@
 		"formsnap": "^1.0.1",
 		"geojson-path-finder": "^2.0.2",
 		"lodash": "^4.17.21",
-		"lucide-svelte": "^0.378.0",
+		"lucide-svelte": "^0.462.0",
 		"maplibre-gl": "^4.6.0",
 		"mode-watcher": "^0.3.1",
 		"paneforge": "^0.0.4",

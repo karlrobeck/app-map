@@ -1,12 +1,17 @@
 <script lang="ts">
-	import Button from '$lib/components/ui/button/button.svelte';
+	import { onMount } from 'svelte';
+	import { LoaderCircle } from 'lucide-svelte';
+
+	onMount(() => {
+		setTimeout(() => {
+			window.location.href = '/maps';
+		}, 3000);
+	});
 </script>
 
-<main class="flex flex-col gap-5">
-	<h1>Welcome to Bagbag Cemetery</h1>
-	<p>Explore and navigate the cemetery with our mapping services. Click to Get Started now</p>
-	<div class="flex flex-wrap gap-2">
-		<Button href="/app">Get started</Button>
-		<Button variant="ghost" href="/app/about">Learn more</Button>
+<main class="flex h-screen max-h-screen flex-col items-center justify-center gap-2.5 p-4">
+	<h2 class="border-none font-bold">Bagbag cemetery</h2>
+	<div class="flex items-center gap-2.5">
+		<LoaderCircle size="32" class="animate-spin" />
 	</div>
 </main>
