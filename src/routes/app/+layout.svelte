@@ -14,16 +14,18 @@
 	import { Checkbox } from '$lib/components/ui/checkbox';
 	import { Label } from '$lib/components/ui/label';
 	import Slider from '$lib/components/ui/slider/slider.svelte';
+	import About from './about.svelte';
+	import Savelist from './savelist.svelte';
 	let filterValue = {};
 	let records: RecordDB[] = [];
 	let searchResult: Array<RecordDB> = [];
 	let topResult: string = '';
-	let filterByGender:boolean = false;
-	let filterByAgeRange:boolean = false;
-	let filterByCategory:boolean = false;
-	let categoryValue:string = ''
-	let ageRangeValue:number[] = [20,50]
-	let genderValue:string = ''
+	let filterByGender: boolean = false;
+	let filterByAgeRange: boolean = false;
+	let filterByCategory: boolean = false;
+	let categoryValue: string = '';
+	let ageRangeValue: number[] = [20, 50];
+	let genderValue: string = '';
 
 	onMount(async () => {
 		const response = await fetch('/records.json');
@@ -215,27 +217,30 @@
 					<Sheet.Content side="bottom" class="h-3/4">
 						<div class="space-y-5 p-4">
 							<h4>Filter by</h4>
-							<hr>
+							<hr />
 							<div class="space-y-5">
 								<div class="space-y-2.5">
 									<div class="flex flex-row items-center gap-2.5">
 										<span class="muted">Gender</span>
 										<Checkbox bind:checked={filterByGender} />
 									</div>
-									<Select.Root onSelectedChange={(v) => {
-										if(v){
-											//@ts-ignore
-											genderValue = v.value
-										}
-									}} disabled={!filterByGender}>
+									<Select.Root
+										onSelectedChange={(v) => {
+											if (v) {
+												//@ts-ignore
+												genderValue = v.value;
+											}
+										}}
+										disabled={!filterByGender}
+									>
 										<Select.Trigger>
 											<Select.Value placeholder="Select Gender" />
 										</Select.Trigger>
 										<Select.Content>
 											<Select.Group>
 												<Select.Label>Gender</Select.Label>
-												<Select.Item value='male' label={'Male'}>Male</Select.Item>
-												<Select.Item value='female' label={'Female'}>Female</Select.Item>
+												<Select.Item value="male" label={'Male'}>Male</Select.Item>
+												<Select.Item value="female" label={'Female'}>Female</Select.Item>
 											</Select.Group>
 										</Select.Content>
 									</Select.Root>
@@ -245,7 +250,13 @@
 										<span class="muted">Age</span>
 										<Checkbox bind:checked={filterByAgeRange} />
 									</div>
-									<Slider class={!filterByAgeRange ? "opacity-20" : ""} disabled={!filterByAgeRange} bind:value={ageRangeValue} min={0} max={100} />
+									<Slider
+										class={!filterByAgeRange ? 'opacity-20' : ''}
+										disabled={!filterByAgeRange}
+										bind:value={ageRangeValue}
+										min={0}
+										max={100}
+									/>
 									<span class="muted">{ageRangeValue[0]} to {ageRangeValue[1]}</span>
 								</div>
 								<div class="space-y-2.5">
@@ -319,61 +330,11 @@
 		<slot></slot>
 	</article>
 	<footer class="absolute bottom-0 z-50 w-full">
-		<nav class="grid grid-cols-3 gap-5 rounded-tl-md rounded-tr-md bg-accent p-4">
-			<div class="flex flex-col items-center">
-				<Button size="icon" variant="ghost" href="/app">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="16"
-						height="16"
-						fill="currentColor"
-						class="bi bi-geo"
-						viewBox="0 0 16 16"
-					>
-						<path
-							fill-rule="evenodd"
-							d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999zm2.493 8.574a.5.5 0 0 1-.411.575c-.712.118-1.28.295-1.655.493a1.3 1.3 0 0 0-.37.265.3.3 0 0 0-.057.09V14l.002.008.016.033a.6.6 0 0 0 .145.15c.165.13.435.27.813.395.751.25 1.82.414 3.024.414s2.273-.163 3.024-.414c.378-.126.648-.265.813-.395a.6.6 0 0 0 .146-.15l.015-.033L12 14v-.004a.3.3 0 0 0-.057-.09 1.3 1.3 0 0 0-.37-.264c-.376-.198-.943-.375-1.655-.493a.5.5 0 1 1 .164-.986c.77.127 1.452.328 1.957.594C12.5 13 13 13.4 13 14c0 .426-.26.752-.544.977-.29.228-.68.413-1.116.558-.878.293-2.059.465-3.34.465s-2.462-.172-3.34-.465c-.436-.145-.826-.33-1.116-.558C3.26 14.752 3 14.426 3 14c0-.599.5-1 .961-1.243.505-.266 1.187-.467 1.957-.594a.5.5 0 0 1 .575.411"
-						/>
-					</svg>
-				</Button>
-				<span class="small">Map</span>
-			</div>
-			<div class="flex flex-col items-center">
-				<Button size="icon" variant="ghost">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="16"
-						height="16"
-						fill="currentColor"
-						class="bi bi-geo"
-						viewBox="0 0 16 16"
-					>
-						<path
-							fill-rule="evenodd"
-							d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999zm2.493 8.574a.5.5 0 0 1-.411.575c-.712.118-1.28.295-1.655.493a1.3 1.3 0 0 0-.37.265.3.3 0 0 0-.057.09V14l.002.008.016.033a.6.6 0 0 0 .145.15c.165.13.435.27.813.395.751.25 1.82.414 3.024.414s2.273-.163 3.024-.414c.378-.126.648-.265.813-.395a.6.6 0 0 0 .146-.15l.015-.033L12 14v-.004a.3.3 0 0 0-.057-.09 1.3 1.3 0 0 0-.37-.264c-.376-.198-.943-.375-1.655-.493a.5.5 0 1 1 .164-.986c.77.127 1.452.328 1.957.594C12.5 13 13 13.4 13 14c0 .426-.26.752-.544.977-.29.228-.68.413-1.116.558-.878.293-2.059.465-3.34.465s-2.462-.172-3.34-.465c-.436-.145-.826-.33-1.116-.558C3.26 14.752 3 14.426 3 14c0-.599.5-1 .961-1.243.505-.266 1.187-.467 1.957-.594a.5.5 0 0 1 .575.411"
-						/>
-					</svg>
-				</Button>
-				<span class="small"> Saved </span>
-			</div>
-			<div class="flex flex-col items-center">
-				<Button size="icon" variant="ghost">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="16"
-						height="16"
-						fill="currentColor"
-						class="bi bi-geo"
-						viewBox="0 0 16 16"
-					>
-						<path
-							fill-rule="evenodd"
-							d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999zm2.493 8.574a.5.5 0 0 1-.411.575c-.712.118-1.28.295-1.655.493a1.3 1.3 0 0 0-.37.265.3.3 0 0 0-.057.09V14l.002.008.016.033a.6.6 0 0 0 .145.15c.165.13.435.27.813.395.751.25 1.82.414 3.024.414s2.273-.163 3.024-.414c.378-.126.648-.265.813-.395a.6.6 0 0 0 .146-.15l.015-.033L12 14v-.004a.3.3 0 0 0-.057-.09 1.3 1.3 0 0 0-.37-.264c-.376-.198-.943-.375-1.655-.493a.5.5 0 1 1 .164-.986c.77.127 1.452.328 1.957.594C12.5 13 13 13.4 13 14c0 .426-.26.752-.544.977-.29.228-.68.413-1.116.558-.878.293-2.059.465-3.34.465s-2.462-.172-3.34-.465c-.436-.145-.826-.33-1.116-.558C3.26 14.752 3 14.426 3 14c0-.599.5-1 .961-1.243.505-.266 1.187-.467 1.957-.594a.5.5 0 0 1 .575.411"
-						/>
-					</svg>
-				</Button>
-				<span class="small"> About </span>
-			</div>
+		<nav
+			class="flex flex-row items-center justify-center gap-20 rounded-tl-md rounded-tr-md bg-accent p-4 px-24 md:justify-start"
+		>
+			<About />
+			<Savelist />
 		</nav>
 	</footer>
 </main>
