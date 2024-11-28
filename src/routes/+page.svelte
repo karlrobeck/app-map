@@ -4,7 +4,7 @@
 
 	onMount(() => {
 		setTimeout(() => {
-			window.location.href = '/maps';
+			window.location.href = '/app';
 		}, 3000);
 	});
 </script>
