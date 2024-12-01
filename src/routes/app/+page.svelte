@@ -167,8 +167,12 @@
 											>
 										</Avatar.Root>
 										<div class="flex flex-col items-start">
-											<h3 class="scroll-m-0 text-sm sm:text-2xl tracking-normal">{value.lastName}, {value.firstName}, {value.middleName}</h3>
-											<h4 class="scroll-m-0 text-sm sm:text-xl tracking-normal">{value.category} / {value.sex}</h4>
+											<h3 class="scroll-m-0 text-sm tracking-normal sm:text-2xl">
+												{value.lastName}, {value.firstName}, {value.middleName}
+											</h3>
+											<h4 class="scroll-m-0 text-sm tracking-normal sm:text-xl">
+												{value.category} / {value.sex}
+											</h4>
 										</div>
 									</div>
 									<div class="flex flex-row items-center gap-5">
