@@ -45,7 +45,7 @@
 				coordsArray.push({ long: coords[0], lat: coords[1] });
 			});
 		});
-		userLocation = { long: 121.0298, lat: 14.6966 };
+		userLocation = { long: 121.0287, lat: 14.6979 };
 
 		// Find the nearest node
 		let minDistance = Infinity;
@@ -82,6 +82,7 @@
 							const sheetBtn = <HTMLButtonElement>document.getElementById('clusterSheetBtn');
 							clusterData['nameProperty'] = nameProperty;
 							clusterData['addressProperty'] = addressProperty;
+							clusterData['coordinates'] = ev.lngLat;
 							//@ts-ignore
 							clusterData['records'] = retrieveByCluster(data.records, clusterData['nameProperty']);
 							sheetBtn.click();
@@ -117,8 +118,10 @@
 	<Drawer.Content class="mx-auto h-3/4 w-full">
 		<div class="h-full w-full overflow-y-auto">
 			<Drawer.Header>
-				<Drawer.Description>
-					{clusterData?.addressProperty}
+				<Drawer.Description class="flex flex-col">
+					<span>Longtitude: {clusterData.coordinates?.lng.toFixed(4)}, </span>
+					<span>Latitude: {clusterData.coordinates?.lat.toFixed(4)}</span>
+					<span>Address: {clusterData?.addressProperty}</span>
 				</Drawer.Description>
 				<Drawer.Title>
 					{clusterData?.nameProperty}
