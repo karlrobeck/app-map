@@ -1,1 +1,28 @@
-{"theme_color":"#8936FF","background_color":"#2EC6FE","icons":[{"purpose":"maskable","sizes":"512x512","src":"icon512_maskable.png","type":"image/png"},{"purpose":"any","sizes":"512x512","src":"icon512_rounded.png","type":"image/png"}],"orientation":"portrait","display":"standalone","dir":"auto","lang":"en-US","name":"Bagbag cemetery","short_name":"Bagbag","start_url":"/","scope":"/","description":"Bagbag Cemetery is a public cemetery located in Quezon City, Philippines. It is one of the oldest cemeteries in the city and is known for its historical significance.","id":"bagbag-cemetery.vercel.app"}
+{
+    "theme_color": "#8936FF",
+    "background_color": "#2EC6FE",
+    "icons": [
+        {
+            "purpose": "maskable",
+            "sizes": "512x512",
+            "src": "icon512_maskable.png",
+            "type": "image/png"
+        },
+        {
+            "purpose": "any",
+            "sizes": "512x512",
+            "src": "icon512_rounded.png",
+            "type": "image/png"
+        }
+    ],
+    "orientation": "portrait",
+    "display": "standalone",
+    "dir": "auto",
+    "lang": "en-US",
+    "name": "Bagbag cemetery",
+    "short_name": "Bagbag",
+    "start_url": "/",
+    "scope": "/",
+    "description": "Bagbag Cemetery is a public cemetery located in Quezon City, Philippines. It is one of the oldest cemeteries in the city and is known for its historical significance.",
+    "id": "bagbag-cemetery.vercel.app"
+}

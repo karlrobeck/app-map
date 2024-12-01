@@ -28,10 +28,13 @@ export interface RecordDB {
 }
 
 export async function readRecord(
-	event_fetch: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
+	event_fetch: (
+		input: RequestInfo | URL,
+		init?: RequestInit,
+	) => Promise<Response>,
 ): Promise<Array<RecordDB>> {
-	const response = await event_fetch('/records.json', {
-		method: 'GET'
+	const response = await event_fetch("/records.json", {
+		method: "GET",
 	});
 
 	let records = await response.json();
@@ -41,7 +44,7 @@ export async function readRecord(
 
 export function retrieveByCemetery(
 	database: Array<RecordDB>,
-	name: string
+	name: string,
 ): Array<RecordDB | undefined> {
 	const fromCemetery = database
 		.map((value) => {
@@ -54,21 +57,30 @@ export function retrieveByCemetery(
 	return fromCemetery;
 }
 
-export function searchPerson(database: Array<RecordDB>, name: string): Array<RecordDB> {
+export function searchPerson(
+	database: Array<RecordDB>,
+	name: string,
+): Array<RecordDB> {
 	const searchTerms = name.toLowerCase().split(/\s+/);
 
 	const filteredRecords = database.filter((record) => {
-		const fullName = `${record.firstName} ${record.middleName} ${record.lastName}`.toLowerCase();
+		const fullName =
+			`${record.firstName} ${record.middleName} ${record.lastName}`
+				.toLowerCase();
 		return searchTerms.every((searchTerm) => fullName.includes(searchTerm));
 	});
 
 	return filteredRecords;
 }
 
-export function retrieveByAge(database: Array<RecordDB>, age: number): Array<RecordDB | undefined> {
+export function retrieveByAge(
+	database: Array<RecordDB>,
+	start: number,
+	end: number,
+): Array<RecordDB | undefined> {
 	const fromAge = database
 		.map((value) => {
-			if (value.age === age) {
+			if (value.age >= start && value.age <= end) {
 				return value;
 			}
 		})
@@ -77,15 +89,20 @@ export function retrieveByAge(database: Array<RecordDB>, age: number): Array<Rec
 	return fromAge;
 }
 
-export function retrieveByCluster(database: Array<RecordDB>, cluster: string): Array<RecordDB> {
-	const formattedCluster = `${cluster[0]}-${cluster
-		.split('')
-		.filter((value) => {
-			//@ts-ignore
-			return !isNaN(value);
-		})
-		.join('')
-		.trim()}`;
+export function retrieveByCluster(
+	database: Array<RecordDB>,
+	cluster: string,
+): Array<RecordDB> {
+	const formattedCluster = `${cluster[0]}-${
+		cluster
+			.split("")
+			.filter((value) => {
+				//@ts-ignore
+				return !isNaN(value);
+			})
+			.join("")
+			.trim()
+	}`;
 
 	const filteredResult = database.filter((value) => {
 		if (value.cluster.toLowerCase() === formattedCluster.toLowerCase()) {
@@ -99,7 +116,7 @@ export function retrieveByCluster(database: Array<RecordDB>, cluster: string): A
 export function retrieveByAgeRange(
 	database: Array<RecordDB>,
 	from: number,
-	to: number
+	to: number,
 ): Array<RecordDB | undefined> {
 	const fromAgeRange = database
 		.map((value) => {
@@ -113,8 +130,9 @@ export function retrieveByAgeRange(
 
 export function retrieveByGender(
 	database: Array<RecordDB>,
-	gender: string
+	gender: string,
 ): Array<RecordDB | undefined> {
+	console.log(gender);
 	const fromGender = database
 		.map((value) => {
 			if (value.sex.toLowerCase() === gender.toLowerCase()) {
@@ -127,7 +145,7 @@ export function retrieveByGender(
 
 export function retrieveByCategory(
 	database: Array<RecordDB>,
-	category: string
+	category: string,
 ): Array<RecordDB | undefined> {
 	const fromCategory = database
 		.map((value) => {
@@ -141,7 +159,7 @@ export function retrieveByCategory(
 
 export function retrieveByORNumber(
 	database: Array<RecordDB>,
-	ORNumber: number
+	ORNumber: number,
 ): Array<RecordDB | undefined> {
 	const fromORNumber = database
 		.map((value) => {

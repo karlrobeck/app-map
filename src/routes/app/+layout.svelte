@@ -4,7 +4,14 @@
 	import * as Sheet from '$lib/components/ui/sheet';
 	import * as Card from '$lib/components/ui/card';
 	import { onMount, setContext } from 'svelte';
-	import { retrieveByAgeRange, retrieveByGender, searchPerson, type RecordDB } from '$lib/db/index';
+	import {
+		retrieveByAge,
+		retrieveByAgeRange,
+		retrieveByCategory,
+		retrieveByGender,
+		searchPerson,
+		type RecordDB
+	} from '$lib/db/index';
 	import * as Select from '$lib/components/ui/select/index.js';
 	import * as Command from '$lib/components/ui/command/index.js';
 	import * as Drawer from '$lib/components/ui/drawer';
@@ -16,38 +23,60 @@
 	import Slider from '$lib/components/ui/slider/slider.svelte';
 	import About from './about.svelte';
 	import Savelist from './savelist.svelte';
-	let filterValue = {};
 	let records: RecordDB[] = [];
 	let searchResult: Array<RecordDB> = [];
 	let topResult: string = '';
 	let filterByGender: boolean = false;
 	let filterByAgeRange: boolean = false;
 	let filterByCategory: boolean = false;
-	let categoryValue: string = '';
+	let categoryValue: { value: string; label: string; disabled: boolean } | any = {};
 	let ageRangeValue: number[] = [20, 50];
-	let genderValue: string = '';
+	let genderValue: Select.Selected<unknown> = { value: '', label: '', disabled: false };
 
 	onMount(async () => {
-		const response = await fetch('/records.json');
-		records = <RecordDB[]>await response.json();
-		window.records = records;
+		// check first if the records are saved in the local storage
+		if (localStorage.getItem('records')) {
+			console.log('records are saved in the local storage');
+			records = JSON.parse(localStorage.getItem('records') as string);
+			console.log(records);
+			window.records = records;
+		} else {
+			console.log('records are not saved in the local storage');
+			const response = await fetch('/records.json');
+			records = <RecordDB[]>await response.json();
+			window.records = records;
+		}
 	});
 
 	function sendSearch(event: SubmitEvent) {
 		//@ts-ignore
 		const searchVal = event.target.search.value;
-		// request the record data
+
 		searchResult = searchPerson(records, searchVal);
 		document.getElementById('searchResultDialog')?.click();
 	}
 	$: {
 		if (lodash.isArray(records)) {
-			searchResult = searchPerson(records, topResult);
+			let filterValue = [] as RecordDB[];
+			if (filterByAgeRange) {
+				filterValue = retrieveByAge(records, ageRangeValue[0], ageRangeValue[1]) as RecordDB[];
+			} else if (filterByGender) {
+				filterValue = retrieveByGender(records, genderValue.value) as RecordDB[];
+			} else if (filterByCategory) {
+				if (categoryValue.value === undefined) {
+					categoryValue.value = '';
+				}
+				console.log(categoryValue.value);
+				filterValue = retrieveByCategory(records, categoryValue.value) as RecordDB[];
+			} else {
+				filterValue = records;
+			}
+			searchResult = searchPerson(filterValue, topResult);
 		}
 	}
 </script>
 
-<main class="relative h-screen flex-col">
+<main class="relative h-screen max-h-screen flex-col">
 	<header class="absolute top-0 z-50 mx-4 mt-3.5 w-[80vw]">
 		<div class="relative">
 			<form on:submit|preventDefault={sendSearch}>
@@ -225,6 +254,7 @@
 										<Checkbox bind:checked={filterByGender} />
 									</div>
 									<Select.Root
+										bind:selected={genderValue}
 										onSelectedChange={(v) => {
 											if (v) {
 												//@ts-ignore
@@ -264,7 +294,15 @@
 										<span class="muted">Category</span>
 										<Checkbox bind:checked={filterByCategory} />
 									</div>
-									<Select.Root disabled={!filterByCategory}>
+									<Select.Root
+										disabled={!filterByCategory}
+										bind:selected={categoryValue}
+										onSelectedChange={(v) => {
+											if (v) {
+												categoryValue = v.value;
+											}
+										}}
+									>
 										<Select.Trigger>
 											<Select.Value placeholder="Select Category" />
 										</Select.Trigger>
