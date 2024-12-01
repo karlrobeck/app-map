@@ -186,21 +186,8 @@
 														>
 													</div>
 													<div class="grid grid-cols-2">
-														<span class="small sm:large">Date of interment</span>
-														<span class="small sm:large underline">{record.dateOfInterment}</span>
-													</div>
-													<div class="grid grid-cols-2">
-														<span class="small sm:large">Date of burial</span>
-														<span class="small sm:large underline">{record.dateOfBurial}</span>
-													</div>
-													<div class="grid grid-cols-2">
-														<span class="small sm:large">O.R Number</span>
-														<span class="small sm:large underline">{record.ORNumber}</span>
-													</div>
-													<div class="grid grid-cols-2">
-														<span class="small sm:large">Registration Number</span>
-														<span class="small sm:large underline">{record.registrationNumber}</span
-														>
+														<span class="small sm:large">Caretaker</span>
+														<span class="small sm:large underline">{record.caretaker}</span>
 													</div>
 													<div class="grid grid-cols-2">
 														<span class="small sm:large">Cemetery</span>
