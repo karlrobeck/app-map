@@ -81,8 +81,8 @@
 			</ul>
 			<h4 class="muted">Developed By:</h4>
 			<ul class="space-y-2.5 pl-8">
-				<li class="muted">Developer: 1</li>
-				<li class="muted">Developer: 2</li>
+				<li class="muted">Genelita G. Biglang-awa</li>
+				<li class="muted">Kurt Retzel G. Kenniker</li>
 			</ul>
 		</div>
 	</Sheet.Content>
